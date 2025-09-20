@@ -1,6 +1,8 @@
-// import icons from '../img/icons.svg';
-// console.log(icons);
-
+import * as model from './model.js';
+import icons from 'url:../img/icons.svg';
+import recipeview from './views/recipeview.js';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 const recipeContainer = document.querySelector('.recipe');
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -14,29 +16,27 @@ const timeout = function (s) {
 // https://forkify-api.jonas.io
 
 ///////////////////////////////////////
-console.log('Testing');
-async function fetchRecipe() {
-  try {
-    console.log('si');
-    const respones = await fetch(
-      'https://forkify-api.jonas.io/api/v2/recipes/664c8f193e7aa067e94e8413'
-    );
-    const data = await respones.json();
-    let { recipe } = data.data;
-    recipe = {
-      title: recipe.title,
-      id: recipe.id,
-      imageUrl: recipe.image_url,
-      ingredients: recipe.ingredients,
-      publisher: recipe.publisher,
-      servings: recipe.servings,
-      sourceUrl: recipe.source_url,
-      cookingTime: recipe.cooking_time,
-    };
-    console.log(recipe);
+const loader = function (parentEl) {
+  const spinner = `
+    <div class="spinner">
+      <svg>
+        <use href="${icons}#icon-loader"></use>
+      </svg>
+    </div> 
+  `;
+  parentEl.innerHTML = '';
+  parentEl.insertAdjacentHTML('afterbegin', spinner);
+};
 
-    if (!respones.ok) throw new Error(`${data.message} - ${respones.status}`);
+async function showRecipe(hash) {
+  try {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    loader(recipeContainer);
+    await model.loadRecipies(id);
+    const { recipe } = model.state;
     // rendring recipes
+    recipeview.render(model.state.recipe)
     const html = `
         <figure class="recipe__fig">
           <img src="${recipe.imageUrl}" alt="${
@@ -50,7 +50,7 @@ async function fetchRecipe() {
         <div class="recipe__details">
           <div class="recipe__info">
             <svg class="recipe__info-icon">
-              <use href="src/img/icons.svg#icon-clock"></use>
+              <use href="${icons}#icon-clock"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--minutes">${
               recipe.cookingTime
@@ -59,7 +59,7 @@ async function fetchRecipe() {
           </div>
           <div class="recipe__info">
             <svg class="recipe__info-icon">
-              <use href="src/img/icons.svg#icon-users"></use>
+              <use href="${icons}#icon-users"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--people">${
               recipe.servings
@@ -69,12 +69,12 @@ async function fetchRecipe() {
             <div class="recipe__info-buttons">
               <button class="btn--tiny btn--increase-servings">
                 <svg>
-                  <use href="src/img/icons.svg#icon-minus-circle"></use>
+                  <use href="${icons}#icon-minus-circle"></use>
                 </svg>
               </button>
               <button class="btn--tiny btn--increase-servings">
                 <svg>
-                  <use href="src/img/icons.svg#icon-plus-circle"></use>
+                  <use href="${icons}#icon-plus-circle"></use>
                 </svg>
               </button>
             </div>
@@ -82,12 +82,12 @@ async function fetchRecipe() {
 
           <div class="recipe__user-generated">
             <svg>
-              <use href="src/img/icons.svg#icon-user"></use>
+              <use href="${icons}#icon-user"></use>
             </svg>
           </div>
           <button class="btn--round">
             <svg class="">
-              <use href="src/img/icons.svg#icon-bookmark-fill"></use>
+              <use href="${icons}#icon-bookmark-fill"></use>
             </svg>
           </button>
         </div>
@@ -101,7 +101,7 @@ async function fetchRecipe() {
               return ` 
             <li class="recipe__ingredient">
               <svg class="recipe__icon">
-                <use href="src/img/icons.svg#icon-check"></use>
+                <use href="${icons}#icon-check"></use>
               </svg>
               <div class="recipe__quantity">${ing.quantity}</div>
               <div class="recipe__description">
@@ -115,7 +115,7 @@ async function fetchRecipe() {
 
             <li class="recipe__ingredient">
               <svg class="recipe__icon">
-                <use href="src/img/icons.svg#icon-check"></use>
+                <use href="${icons}#icon-check"></use>
               </svg>
               <div class="recipe__quantity">0.5</div>
               <div class="recipe__description">
@@ -142,7 +142,7 @@ async function fetchRecipe() {
           >
             <span>Directions</span>
             <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-right"></use>
+              <use href="${icons}#icon-arrow-right"></use>
             </svg>
           </a>
         </div>
@@ -153,4 +153,6 @@ async function fetchRecipe() {
     console.error(error);
   }
 }
-fetchRecipe();
+['hashchange', 'load'].forEach(event =>
+  window.addEventListener(event, showRecipe)
+);
