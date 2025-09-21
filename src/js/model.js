@@ -3,7 +3,6 @@ export const state = {
 };
 export const loadRecipies = async function (id) {
   try {
-    console.log('hi');
     
     const respones = await fetch(
       `https://forkify-api.jonas.io/api/v2/recipes/${id}`
@@ -22,9 +21,8 @@ export const loadRecipies = async function (id) {
       sourceUrl: recipe.source_url,
       cookingTime: recipe.cooking_time,
     };
-    console.log(state.recipe);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     
   }
 };
