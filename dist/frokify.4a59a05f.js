@@ -177,7 +177,7 @@
 
   // Only insert newRequire.load when it is actually used.
   // The code in this file is linted against ES5, so dynamic import is not allowed.
-  // INSERT_LOAD_HERE
+  function $parcel$resolve(url) {  url = importMap[url] || url;  return import.meta.resolve(distDir + url);}newRequire.resolve = $parcel$resolve;
 
   Object.defineProperty(newRequire, 'root', {
     get: function () {
@@ -715,10 +715,14 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "controlRecipies", ()=>controlRecipies);
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
 var _recipeViewJs = require("./views/recipe-view.js");
 var _recipeViewJsDefault = parcelHelpers.interopDefault(_recipeViewJs);
+var _searchViewJs = require("./views/search-view.js");
+var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 async function controlRecipies() {
     try {
@@ -734,19 +738,26 @@ async function controlRecipies() {
         (0, _recipeViewJsDefault.default).renderError();
     }
 }
-// const controlSearchResult = async function () {
-//   try {
-//     model.loadSearchResult()
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const controlSearchResult = async function() {
+    try {
+        // 1) Get Search Quey
+        const query = (0, _searchViewJsDefault.default).getQuery();
+        if (!query) return;
+        // Loading Search Results...
+        await _modelJs.loadSearchResult(query);
+        console.log(_modelJs.state.search.results);
+    } catch (err) {
+        console.log(err);
+    }
+};
+controlSearchResult();
 const init = function() {
     (0, _recipeViewJsDefault.default)._addHandlerRender(controlRecipies);
+    (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResult);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/recipe-view.js":"6QNWn"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/recipe-view.js":"6QNWn","./views/search-view.js":"cBUSJ"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2010,14 +2021,13 @@ var _helperJs = require("./helper.js");
 const state = {
     recipe: {},
     search: {
-        query: [],
+        query: '',
         results: []
     }
 };
 const loadRecipies = async function(id) {
     try {
-        const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}${id}`);
-        console.log(data);
+        const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}/${id}`);
         const { recipe } = data.data;
         state.recipe = {
             title: recipe.title,
@@ -2036,6 +2046,7 @@ const loadRecipies = async function(id) {
 };
 const loadSearchResult = async function(query) {
     try {
+        console.log('ho');
         const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}?search=${query}`);
         console.log(data);
         state.search.results = data.data.recipes.map((res)=>{
@@ -2048,6 +2059,7 @@ const loadSearchResult = async function(query) {
         });
         console.log(state.search.results);
     } catch (err) {
+        console.log(err);
         throw err;
     }
 };
@@ -2704,16 +2716,15 @@ try {
 },{}],"6QNWn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("../../img/icons.svg");
+var _iconsSvg = require("url:../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 var _fractionJs = require("fraction.js");
 var _fractionJsDefault = parcelHelpers.interopDefault(_fractionJs);
-console.log((0, _iconsSvgDefault.default));
 class RecipeView {
     #parentElement = document.querySelector('.recipe');
     #data;
     #errorMsg = "We could't find that Recipe. Please try another one!";
-    #message = '';
+    #message;
     render(data) {
         this.#data = data;
         const markUp = this.#generateMarkUp();
@@ -2724,7 +2735,6 @@ class RecipeView {
         this.#parentElement.innerHTML = '';
     }
     renderLoader() {
-        console.log('hi');
         const spinner = `
       <div class="spinner">
         <svg>
@@ -2875,7 +2885,7 @@ class RecipeView {
 }
 exports.default = new RecipeView();
 
-},{"fraction.js":"md6n5","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../../img/icons.svg":"d6UCS"}],"md6n5":[function(require,module,exports,__globalThis) {
+},{"fraction.js":"md6n5","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","url:../../img/icons.svg":"fd0vu"}],"md6n5":[function(require,module,exports,__globalThis) {
 /*
 Fraction.js v5.3.4 8/22/2025
 https://raw.org/article/rational-numbers-in-javascript/
@@ -3263,6 +3273,31 @@ Licensed under the MIT license.
     }), v["default"] = v, v.Fraction = v, module.exports = v);
 })(this);
 
-},{}],"d6UCS":[function() {},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {})
+},{}],"fd0vu":[function(require,module,exports,__globalThis) {
+module.exports = module.bundle.resolve("icons.0809ef97.svg") + "?" + Date.now();
+
+},{}],"cBUSJ":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class SearchView {
+    #parentEl = document.querySelector('.search');
+    getQuery() {
+        const query = this.#parentEl.querySelector('.search__field').value;
+        this.clearInput(query);
+        return query;
+    }
+    clearInput() {
+        this.#parentEl.querySelector('.search__field').value = '';
+    }
+    addHandlerSearch(handler) {
+        this.#parentEl.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            handler();
+        });
+    }
+}
+exports.default = new SearchView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {}, "./", "/")
 
 //# sourceMappingURL=frokify.4a59a05f.js.map
