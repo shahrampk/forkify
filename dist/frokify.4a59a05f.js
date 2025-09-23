@@ -177,7 +177,7 @@
 
   // Only insert newRequire.load when it is actually used.
   // The code in this file is linted against ES5, so dynamic import is not allowed.
-  function $parcel$resolve(url) {  url = importMap[url] || url;  return import.meta.resolve(distDir + url);}newRequire.resolve = $parcel$resolve;
+  // INSERT_LOAD_HERE
 
   Object.defineProperty(newRequire, 'root', {
     get: function () {
@@ -715,8 +715,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "controlRecipies", ()=>controlRecipies);
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
 var _recipeViewJs = require("./views/recipe-view.js");
@@ -736,6 +734,13 @@ async function controlRecipies() {
         (0, _recipeViewJsDefault.default).renderError();
     }
 }
+// const controlSearchResult = async function () {
+//   try {
+//     model.loadSearchResult()
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 const init = function() {
     (0, _recipeViewJsDefault.default)._addHandlerRender(controlRecipies);
 };
@@ -1999,14 +2004,19 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipies", ()=>loadRecipies);
+parcelHelpers.export(exports, "loadSearchResult", ()=>loadSearchResult);
 var _configJs = require("./config.js");
 var _helperJs = require("./helper.js");
 const state = {
-    recipe: {}
+    recipe: {},
+    search: {
+        query: [],
+        results: []
+    }
 };
 const loadRecipies = async function(id) {
     try {
-        const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}/${id}`);
+        const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}${id}`);
         console.log(data);
         const { recipe } = data.data;
         state.recipe = {
@@ -2022,6 +2032,23 @@ const loadRecipies = async function(id) {
     } catch (error) {
         // ReThrowing the error...
         throw error;
+    }
+};
+const loadSearchResult = async function(query) {
+    try {
+        const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}?search=${query}`);
+        console.log(data);
+        state.search.results = data.data.recipes.map((res)=>{
+            return {
+                title: res.title,
+                id: res.id,
+                imageUrl: res.image_url,
+                publisher: res.publisher
+            };
+        });
+        console.log(state.search.results);
+    } catch (err) {
+        throw err;
     }
 };
 
@@ -2060,7 +2087,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
-const API_URL = 'https://forkify-api.jonas.io/api/v2/recipes';
+const API_URL = 'https://forkify-api.jonas.io/api/v2/recipes/';
 const TIMEOUT_SEC = 10;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"b1fwP":[function(require,module,exports,__globalThis) {
@@ -2677,15 +2704,16 @@ try {
 },{}],"6QNWn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvg = require("../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 var _fractionJs = require("fraction.js");
 var _fractionJsDefault = parcelHelpers.interopDefault(_fractionJs);
+console.log((0, _iconsSvgDefault.default));
 class RecipeView {
     #parentElement = document.querySelector('.recipe');
     #data;
     #errorMsg = "We could't find that Recipe. Please try another one!";
-    #message;
+    #message = '';
     render(data) {
         this.#data = data;
         const markUp = this.#generateMarkUp();
@@ -2696,6 +2724,7 @@ class RecipeView {
         this.#parentElement.innerHTML = '';
     }
     renderLoader() {
+        console.log('hi');
         const spinner = `
       <div class="spinner">
         <svg>
@@ -2846,10 +2875,7 @@ class RecipeView {
 }
 exports.default = new RecipeView();
 
-},{"url:../../img/icons.svg":"fd0vu","fraction.js":"md6n5","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fd0vu":[function(require,module,exports,__globalThis) {
-module.exports = module.bundle.resolve("icons.0809ef97.svg") + "?" + Date.now();
-
-},{}],"md6n5":[function(require,module,exports,__globalThis) {
+},{"fraction.js":"md6n5","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../../img/icons.svg":"d6UCS"}],"md6n5":[function(require,module,exports,__globalThis) {
 /*
 Fraction.js v5.3.4 8/22/2025
 https://raw.org/article/rational-numbers-in-javascript/
@@ -3237,6 +3263,6 @@ Licensed under the MIT license.
     }), v["default"] = v, v.Fraction = v, module.exports = v);
 })(this);
 
-},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {}, "./", "/")
+},{}],"d6UCS":[function() {},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {})
 
 //# sourceMappingURL=frokify.4a59a05f.js.map

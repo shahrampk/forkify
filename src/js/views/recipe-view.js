@@ -1,10 +1,12 @@
-import icons from 'url:../../img/icons.svg';
+import icons  from '../../img/icons.svg';
+console.log(icons);
+
 import Fraction from 'fraction.js';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
   #errorMsg = "We could't find that Recipe. Please try another one!";
-  #message;
+  #message = '';
   render(data) {
     this.#data = data;
     const markUp = this.#generateMarkUp();
@@ -16,6 +18,8 @@ class RecipeView {
   }
 
   renderLoader() {
+    console.log('hi');
+
     const spinner = `
       <div class="spinner">
         <svg>
