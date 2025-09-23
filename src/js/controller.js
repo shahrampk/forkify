@@ -1,11 +1,10 @@
 import * as model from './model.js';
+import recipeView from './views/recipe-view.js';
 import RecipeView from './views/recipe-view.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-
-
-async function controlRecipies() {
+export async function controlRecipies() {
   try {
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -16,8 +15,11 @@ async function controlRecipies() {
     RecipeView.render(model.state.recipe);
   } catch (error) {
     console.error(error);
+    // Catching the error comming from model.js...
+    recipeView.renderError();
   }
 }
-['hashchange', 'load'].forEach(event =>
-  window.addEventListener(event, controlRecipies)
-);
+const init = function () {
+  RecipeView._addHandlerRender(controlRecipies);
+};
+init();

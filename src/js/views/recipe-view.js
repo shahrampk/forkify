@@ -3,6 +3,8 @@ import Fraction from 'fraction.js';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMsg = "We could't find that Recipe. Please try another one!";
+  #message;
   render(data) {
     this.#data = data;
     const markUp = this.#generateMarkUp();
@@ -23,6 +25,34 @@ class RecipeView {
     `;
     this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', spinner);
+  }
+  renderError(message = this.#errorMsg) {
+    const markUp = `
+        <div class="error">
+          <div>
+            <svg>
+              <use href="${icons}#icon-alert-triangle"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div> 
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markUp);
+  }
+  renderMessage(message = this.#message) {
+    const markUp = `
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${icons}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div> 
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markUp);
   }
   #generateMarkUp() {
     return `
@@ -83,7 +113,9 @@ class RecipeView {
             <div class="recipe__ingredients">
               <h2 class="heading--2">Recipe ingredients</h2>
               <ul class="recipe__ingredient-list">
-              ${this.#data.ingredients.map(this.#generateMarkupIngredient).join('')}
+              ${this.#data?.ingredients
+                .map(this.#generateMarkupIngredient)
+                .join('')}
     
                 <li class="recipe__ingredient">
                   <svg class="recipe__icon">
@@ -136,6 +168,9 @@ class RecipeView {
                   </div>
                 </li>
                 `;
+  }
+  _addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 }
 export default new RecipeView();

@@ -715,6 +715,8 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "controlRecipies", ()=>controlRecipies);
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
 var _recipeViewJs = require("./views/recipe-view.js");
@@ -730,12 +732,14 @@ async function controlRecipies() {
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (error) {
         console.error(error);
+        // Catching the error comming from model.js...
+        (0, _recipeViewJsDefault.default).renderError();
     }
 }
-[
-    'hashchange',
-    'load'
-].forEach((event)=>window.addEventListener(event, controlRecipies));
+const init = function() {
+    (0, _recipeViewJsDefault.default)._addHandlerRender(controlRecipies);
+};
+init();
 
 },{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/recipe-view.js":"6QNWn"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
@@ -2016,7 +2020,8 @@ const loadRecipies = async function(id) {
             cookingTime: recipe.cooking_time
         };
     } catch (error) {
-        console.error(`${error} \u{1F4A5}`);
+        // ReThrowing the error...
+        throw error;
     }
 };
 
@@ -2063,16 +2068,14 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getJSON", ()=>getJSON);
 var _config = require("./config");
-var _regeneratorRuntime = require("regenerator-runtime");
 const timeout = function(s) {
     return new Promise(function(_, reject) {
         setTimeout(function() {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
+            reject(new Error(`Request took too long!`));
         }, s * 1000);
     });
 };
 async function getJSON(url) {
-    console.log(url);
     try {
         const respones = await Promise.race([
             fetch(url),
@@ -2086,7 +2089,7 @@ async function getJSON(url) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./config":"2hPh4","regenerator-runtime":"f6ot0"}],"f6ot0":[function(require,module,exports,__globalThis) {
+},{"./config":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f6ot0":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -2681,6 +2684,8 @@ var _fractionJsDefault = parcelHelpers.interopDefault(_fractionJs);
 class RecipeView {
     #parentElement = document.querySelector('.recipe');
     #data;
+    #errorMsg = "We could't find that Recipe. Please try another one!";
+    #message;
     render(data) {
         this.#data = data;
         const markUp = this.#generateMarkUp();
@@ -2700,6 +2705,34 @@ class RecipeView {
     `;
         this.#clear();
         this.#parentElement.insertAdjacentHTML('afterbegin', spinner);
+    }
+    renderError(message = this.#errorMsg) {
+        const markUp = `
+        <div class="error">
+          <div>
+            <svg>
+              <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div> 
+    `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML('afterbegin', markUp);
+    }
+    renderMessage(message = this.#message) {
+        const markUp = `
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div> 
+    `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML('afterbegin', markUp);
     }
     #generateMarkUp() {
         return `
@@ -2754,7 +2787,7 @@ class RecipeView {
             <div class="recipe__ingredients">
               <h2 class="heading--2">Recipe ingredients</h2>
               <ul class="recipe__ingredient-list">
-              ${this.#data.ingredients.map(this.#generateMarkupIngredient).join('')}
+              ${this.#data?.ingredients.map(this.#generateMarkupIngredient).join('')}
     
                 <li class="recipe__ingredient">
                   <svg class="recipe__icon">
@@ -2803,6 +2836,12 @@ class RecipeView {
                   </div>
                 </li>
                 `;
+    }
+    _addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((ev)=>window.addEventListener(ev, handler));
     }
 }
 exports.default = new RecipeView();
