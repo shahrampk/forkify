@@ -723,17 +723,21 @@ var _recipeViewJs = require("./views/recipe-view.js");
 var _recipeViewJsDefault = parcelHelpers.interopDefault(_recipeViewJs);
 var _searchViewJs = require("./views/search-view.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
+var _resultViewsJs = require("./views/result-views.js");
+var _resultViewsJsDefault = parcelHelpers.interopDefault(_resultViewsJs);
 var _runtime = require("regenerator-runtime/runtime");
+if (module.hot) module.hot.accept();
 async function controlRecipies() {
     try {
         const id = window.location.hash.slice(1);
         if (!id) return;
+        // Showing Loader...
         (0, _recipeViewJsDefault.default).renderLoader();
+        // Loading Recipies...
         await _modelJs.loadRecipies(id);
         // rendring recipes
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (error) {
-        console.error(error);
         // Catching the error comming from model.js...
         (0, _recipeViewJsDefault.default).renderError();
     }
@@ -743,21 +747,23 @@ const controlSearchResult = async function() {
         // 1) Get Search Quey
         const query = (0, _searchViewJsDefault.default).getQuery();
         if (!query) return;
+        // Showing Loader...
+        (0, _resultViewsJsDefault.default).renderLoader();
         // Loading Search Results...
         await _modelJs.loadSearchResult(query);
-        console.log(_modelJs.state.search.results);
+        // Rendering Recipies...
+        (0, _resultViewsJsDefault.default).render(_modelJs.state.search.results);
     } catch (err) {
-        console.log(err);
+        (0, _resultViewsJsDefault.default).renderError();
     }
 };
-controlSearchResult();
 const init = function() {
     (0, _recipeViewJsDefault.default)._addHandlerRender(controlRecipies);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResult);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/recipe-view.js":"6QNWn","./views/search-view.js":"cBUSJ"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/recipe-view.js":"6QNWn","./views/search-view.js":"cBUSJ","./views/result-views.js":"pCIGo"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2046,7 +2052,6 @@ const loadRecipies = async function(id) {
 };
 const loadSearchResult = async function(query) {
     try {
-        console.log('ho');
         const data = await (0, _helperJs.getJSON)(`${(0, _configJs.API_URL)}?search=${query}`);
         console.log(data);
         state.search.results = data.data.recipes.map((res)=>{
@@ -3240,6 +3245,9 @@ class View {
         this._parentElement.innerHTML = '';
     }
     render(data) {
+        console.log('check!');
+        console.log(!data || Array.isArray(data) && data.length === 0);
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
         const markUp = this._generateMarkUp();
         this._clear();
@@ -3287,7 +3295,7 @@ class View {
 }
 exports.default = View;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","url:../../img/icons.svg":"fd0vu"}],"cBUSJ":[function(require,module,exports,__globalThis) {
+},{"url:../../img/icons.svg":"fd0vu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cBUSJ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class SearchView {
@@ -3309,6 +3317,44 @@ class SearchView {
 }
 exports.default = new SearchView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {}, "./", "/")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"pCIGo":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("./view");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class ResultsView extends (0, _viewDefault.default) {
+    _parentElement = document.querySelector('.results');
+    _errorMsg = 'No Recipe found for this query! Please try again';
+    _message;
+    _generateMarkUp() {
+        console.log(this._data);
+        return `
+    ${this._data.map(this._generateMarkupCards).join('')}
+    `;
+    }
+    _generateMarkupCards(cardData) {
+        if (!cardData) return;
+        return `
+      <li class="preview">
+        <a class="preview__link" href="#${cardData.id}">
+          <figure class="preview__fig">
+            <img src="${cardData.imageUrl}" alt="${cardData.title}" />
+          </figure>
+          <div class="preview__data">
+            <h4 class="preview__title">${cardData.title}</h4>
+            <p class="preview__publisher">${cardData.publisher}</p>
+            <div class="preview__user-generated hidden">
+              <svg>
+                <use href="src/img/icons.svg#icon-user"></use>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </li>`;
+    }
+}
+exports.default = new ResultsView();
+
+},{"./view":"2kjY2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire06f7", {}, "./", "/")
 
 //# sourceMappingURL=frokify.4a59a05f.js.map

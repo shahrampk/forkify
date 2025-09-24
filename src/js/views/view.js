@@ -6,6 +6,11 @@ export default class View {
     this._parentElement.innerHTML = '';
   }
   render(data) {
+    console.log('check!');
+    console.log(!data || (Array.isArray(data) && data.length === 0));
+
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderError();
     this._data = data;
     const markUp = this._generateMarkUp();
     this._clear();
