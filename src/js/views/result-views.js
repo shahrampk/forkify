@@ -5,10 +5,7 @@ class ResultsView extends View {
   _errorMsg = 'No Recipe found for this query! Please try again';
   _message;
   _generateMarkUp() {
-    console.log(this._data);
-    return `
-    ${this._data.map(this._generateMarkupCards).join('')}
-    `;
+    return this._data.map(this._generateMarkupCards).join('');
   }
   _generateMarkupCards(cardData) {
     if (!cardData) return;

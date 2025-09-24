@@ -6,8 +6,6 @@ export default class View {
     this._parentElement.innerHTML = '';
   }
   render(data) {
-    console.log('check!');
-    console.log(!data || (Array.isArray(data) && data.length === 0));
 
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();

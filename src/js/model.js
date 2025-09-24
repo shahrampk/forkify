@@ -1,10 +1,12 @@
-import { API_URL } from './config.js';
+import { API_URL, SER_PER_PAGE } from './config.js';
 import { getJSON } from './helper.js';
 export const state = {
   recipe: {},
   search: {
     query: '',
     results: [],
+    page: 1,
+    resultsPerPage: SER_PER_PAGE,
   },
 };
 export const loadRecipies = async function (id) {
@@ -29,7 +31,6 @@ export const loadRecipies = async function (id) {
 export const loadSearchResult = async function (query) {
   try {
     const data = await getJSON(`${API_URL}?search=${query}`);
-    console.log(data);
     state.search.results = data.data.recipes.map(res => {
       return {
         title: res.title,
@@ -38,9 +39,15 @@ export const loadSearchResult = async function (query) {
         publisher: res.publisher,
       };
     });
-    console.log(state.search.results);
   } catch (err) {
     console.log(err);
     throw err;
   }
+};
+
+export const searchPerPage = function (page = state.search.page) {
+  start.search.page = page;
+  const start = (page - 1) * 10;
+  const end = page * 10;
+  return state.search.results.slice(start, end);
 };

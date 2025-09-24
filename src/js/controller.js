@@ -5,9 +5,9 @@ import resultViews from './views/result-views.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 export async function controlRecipies() {
   try {
     const id = window.location.hash.slice(1);
@@ -34,9 +34,10 @@ const controlSearchResult = async function () {
     // Showing Loader...
     resultViews.renderLoader();
     // Loading Search Results...
+
     await model.loadSearchResult(query);
     // Rendering Recipies...
-    resultViews.render(model.state.search.results);
+    resultViews.render(model.searchPerPage());
   } catch (err) {
     resultViews.renderError();
   }
