@@ -3,7 +3,6 @@ import icons from 'url:../../img/icons.svg';
 import Fraction from 'fraction.js';
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
-  _errorMsg = "We could't find that Recipe. Please try another one!";
   _message;
 
   _generateMarkUp() {

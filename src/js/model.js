@@ -11,7 +11,7 @@ export const state = {
 };
 export const loadRecipies = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}/${id}`);
+    const data = await getJSON(`${API_URL}${id}`);
     const { recipe } = data.data;
     state.recipe = {
       title: recipe.title,
@@ -46,7 +46,7 @@ export const loadSearchResult = async function (query) {
 };
 
 export const searchPerPage = function (page = state.search.page) {
-  start.search.page = page;
+  state.search.page = page;
   const start = (page - 1) * 10;
   const end = page * 10;
   return state.search.results.slice(start, end);

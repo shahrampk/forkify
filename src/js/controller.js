@@ -2,9 +2,9 @@ import * as model from './model.js';
 import RecipeView from './views/recipe-view.js';
 import searchView from './views/search-view.js';
 import resultViews from './views/result-views.js';
+import paginationView from './views/pagination-view.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-
 // if (module.hot) {
 //   module.hot.accept();
 // }
@@ -38,12 +38,19 @@ const controlSearchResult = async function () {
     await model.loadSearchResult(query);
     // Rendering Recipies...
     resultViews.render(model.searchPerPage());
+    paginationView.render(model.state.search);
   } catch (err) {
+    console.log(err);
     resultViews.renderError();
   }
+};
+const controlPaginations = function (goToPage) {
+  resultViews.render(model.searchPerPage(goToPage));
+  paginationView.render(model.state.search);
 };
 const init = function () {
   RecipeView._addHandlerRender(controlRecipies);
   searchView.addHandlerSearch(controlSearchResult);
+  paginationView.addHandlerBtn(controlPaginations);
 };
 init();

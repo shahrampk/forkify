@@ -1,8 +1,8 @@
 import View from './view';
+import icons from 'url:../../img/icons.svg';
 
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
-  _errorMsg = 'No Recipe found for this query! Please try again';
   _message;
   _generateMarkUp() {
     return this._data.map(this._generateMarkupCards).join('');
@@ -21,7 +21,7 @@ class ResultsView extends View {
             <p class="preview__publisher">${cardData.publisher}</p>
             <div class="preview__user-generated hidden">
               <svg>
-                <use href="src/img/icons.svg#icon-user"></use>
+                <use href="${icons}#icon-user"></use>
               </svg>
             </div>
           </div>
