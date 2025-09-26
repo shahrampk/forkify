@@ -40,11 +40,15 @@ export const loadSearchResult = async function (query) {
       };
     });
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
-
+export const UpdateServing = function name(newServings) {
+  state.recipe.ingredients.forEach(ing => {
+    ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+  });
+  state.recipe.servings = newServings;
+};
 export const searchPerPage = function (page = state.search.page) {
   state.search.page = page;
   const start = (page - 1) * 10;

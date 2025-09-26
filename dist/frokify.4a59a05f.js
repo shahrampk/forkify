@@ -716,9 +716,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-// if (module.hot) {
-//   module.hot.accept();
-// }
 parcelHelpers.export(exports, "controlRecipies", ()=>controlRecipies);
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
@@ -753,6 +750,8 @@ const controlSearchResult = async function() {
         if (!query) return;
         // Showing Loader...
         (0, _resultViewsJsDefault.default).renderLoader();
+        (0, _paginationViewJsDefault.default)._clear();
+        _modelJs.state.search.page = 1;
         // Loading Search Results...
         await _modelJs.loadSearchResult(query);
         // Rendering Recipies...
@@ -767,8 +766,13 @@ const controlPaginations = function(goToPage) {
     (0, _resultViewsJsDefault.default).render(_modelJs.searchPerPage(goToPage));
     (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
 };
+const controlServings = function(newServings) {
+    _modelJs.UpdateServing(newServings);
+    (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
+};
 const init = function() {
-    (0, _recipeViewJsDefault.default)._addHandlerRender(controlRecipies);
+    (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipies);
+    (0, _recipeViewJsDefault.default).addHandlerUpdateServing(controlServings);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResult);
     (0, _paginationViewJsDefault.default).addHandlerBtn(controlPaginations);
 };
@@ -2033,6 +2037,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipies", ()=>loadRecipies);
 parcelHelpers.export(exports, "loadSearchResult", ()=>loadSearchResult);
+parcelHelpers.export(exports, "UpdateServing", ()=>UpdateServing);
 parcelHelpers.export(exports, "searchPerPage", ()=>searchPerPage);
 var _configJs = require("./config.js");
 var _helperJs = require("./helper.js");
@@ -2076,9 +2081,14 @@ const loadSearchResult = async function(query) {
             };
         });
     } catch (err) {
-        console.log(err);
         throw err;
     }
+};
+const UpdateServing = function name(newServings) {
+    state.recipe.ingredients.forEach((ing)=>{
+        ing.quantity = ing.quantity * newServings / state.recipe.servings;
+    });
+    state.recipe.servings = newServings;
 };
 const searchPerPage = function(page = state.search.page) {
     state.search.page = page;
@@ -2190,12 +2200,12 @@ class RecipeView extends (0, _viewDefault.default) {
                 <span class="recipe__info-text">servings</span>
     
                 <div class="recipe__info-buttons">
-                  <button class="btn--tiny btn--increase-servings">
+                  <button class="btn--tiny btn--update-servings" data-update-to ="${this._data.servings - 1}">
                     <svg>
                       <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
                     </svg>
                   </button>
-                  <button class="btn--tiny btn--increase-servings">
+                  <button class="btn--tiny btn--update-servings" data-update-to ="${this._data.servings + 1}">
                     <svg>
                       <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
                     </svg>
@@ -2253,6 +2263,14 @@ class RecipeView extends (0, _viewDefault.default) {
             </div>
         `;
     }
+    addHandlerUpdateServing(handler) {
+        this._parentElement.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn--update-servings');
+            if (!btn) return;
+            const updateTo = +btn.dataset.updateTo;
+            if (updateTo > 0) handler(updateTo);
+        });
+    }
     _generateMarkupIngredient(ing) {
         if (!ing.quantity) return;
         return ` 
@@ -2268,7 +2286,7 @@ class RecipeView extends (0, _viewDefault.default) {
                 </li>
                 `;
     }
-    _addHandlerRender(handler) {
+    addHandlerRender(handler) {
         [
             'hashchange',
             'load'
