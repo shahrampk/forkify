@@ -9,7 +9,7 @@
   <link rel="shortcut icon" href="src/img/favicon.png" type="image/x-icon" />
 
   <link rel="stylesheet" href="./src/css/style.css" />
-  <script type="module" defer src="./src/js/controller.js"></script>
+  <!-- <script type="module" defer src="./src/js/controller.js"></script> -->
 
   <title>forkify // Search over 1,000,000 recipes</title>
 </head>
@@ -27,10 +27,26 @@
           <span>Search</span>
         </button>
       </form>
-
       <nav class="nav">
         <ul class="nav__list">
-          <li class="nav__item">
+          <li class="nav__item nav__small-screen">
+            <button class="nav__btn nav__btn--search">
+              <svg class="nav__icon">
+                <use href="src/img/icons.svg#icon-search"></use>
+              </svg>
+            </button>
+          </li>
+
+          <li class="nav__item nav__small-screen">
+            <button class="nav__btn nav__btn--hamburger">
+              <svg class="nav__icon " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"
+                stroke="#f38e82" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+          </li>
+
+          <li class="nav__item nav__big-screen">
             <button class="nav__btn nav__btn--add-recipe">
               <svg class="nav__icon">
                 <use href="src/img/icons.svg#icon-edit"></use>
@@ -38,7 +54,8 @@
               <span>Add recipe</span>
             </button>
           </li>
-          <li class="nav__item">
+
+          <li class="nav__item nav__big-screen">
             <button class="nav__btn nav__btn--bookmarks">
               <svg class="nav__icon">
                 <use href="src/img/icons.svg#icon-bookmark"></use>
@@ -61,7 +78,7 @@
                 <!-- <li class="preview">
                     <a class="preview__link" href="#23456">
                       <figure class="preview__fig">
-                        <img src="src/img/test-1.jpg" alt="Test" />
+                        <img src="#" alt="Test" />
                       </figure>
                       <div class="preview__data">
                         <h4 class="preview__name">
@@ -80,39 +97,74 @@
 
     <div class="search-results">
       <ul class="results">
-        <!-- 
-          <li class="preview">
-            <a class="preview__link preview__link--active" href="#23456">
-              <figure class="preview__fig">
-                <img src="src/img/test-1.jpg" alt="Test" />
-              </figure>
-              <div class="preview__data">
-                <h4 class="preview__title">Pasta with Tomato Cream ...</h4>
-                <p class="preview__publisher">The Pioneer Woman</p>
-                <div class="preview__user-generated">
+        <!-- preview__link--active -->
+        <li class="preview">
+          <img src="src/img/logo.png" alt="Logo" class="preview__logo--mobile" />
+        </li>
+        <li class="preview">
+          <a class="preview__link" href="#23456">
+            <figure class="preview__fig">
+              <img src="#" alt="Test" />
+            </figure>
+            <div class="preview__data">
+              <h4 class="preview__title">Pasta with Tomato Cream ...</h4>
+              <p class="preview__publisher">The Pioneer Woman</p>
+              <!-- <div class="preview__user-generated">
                   <svg>
                     <use href="src/img/icons.svg#icon-user"></use>
                   </svg>
-                </div>
-              </div>
-            </a>
-          </li>
-           -->
+                </div> -->
+            </div>
+          </a>
+        </li>
+        <li class="preview">
+          <a class="preview__link" href="#23456">
+            <figure class="preview__fig">
+              <img src="#" alt="Test" />
+            </figure>
+            <div class="preview__data">
+              <h4 class="preview__title">Pasta with Tomato Cream ...</h4>
+              <p class="preview__publisher">The Pioneer Woman</p>
+              <!-- <div class="preview__user-generated">
+                  <svg>
+                    <use href="src/img/icons.svg#icon-user"></use>
+                  </svg>
+                </div> -->
+            </div>
+          </a>
+        </li>
+        <li class="preview">
+          <a class="preview__link" href="#23456">
+            <figure class="preview__fig">
+              <img src="#" alt="Test" />
+            </figure>
+            <div class="preview__data">
+              <h4 class="preview__title">Pasta with Tomato Cream ...</h4>
+              <p class="preview__publisher">The Pioneer Woman</p>
+              <!-- <div class="preview__user-generated">
+                  <svg>
+                    <use href="src/img/icons.svg#icon-user"></use>
+                  </svg>
+                </div> -->
+            </div>
+          </a>
+        </li>
+
       </ul>
 
       <div class="pagination">
-        <!-- <button class="btn--inline pagination__btn--prev">
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-left"></use>
-            </svg>
-            <span>Page 1</span>
-          </button>
-          <button class="btn--inline pagination__btn--next">
-            <span>Page 3</span>
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-right"></use>
-            </svg>
-          </button> -->
+        <button class="btn--inline pagination__btn--prev">
+          <svg class="search__icon">
+            <use href="src/img/icons.svg#icon-arrow-left"></use>
+          </svg>
+          <span>Page 1</span>
+        </button>
+        <button class="btn--inline pagination__btn--next">
+          <span>Page 3</span>
+          <svg class="search__icon">
+            <use href="src/img/icons.svg#icon-arrow-right"></use>
+          </svg>
+        </button>
       </div>
 
       <p class="copyright">
@@ -124,14 +176,14 @@
     </div>
 
     <div class="recipe">
-      <div class="message">
+      <!-- <div class="message">
         <div>
           <svg>
             <use href="src/img/icons.svg#icon-smile"></use>
           </svg>
         </div>
         <p>Start by searching for a recipe or an ingredient. Have fun!</p>
-      </div>
+      </div> -->
 
       <!-- <div class="spinner">
           <svg>
@@ -148,101 +200,128 @@
             <p>No recipes found for your query. Please try again!</p>
           </div> -->
 
-      <!--
-        <figure class="recipe__fig">
-          <img src="src/img/test-1.jpg" alt="Tomato" class="recipe__img" />
-          <h1 class="recipe__title">
-            <span>Pasta with tomato cream sauce</span>
-          </h1>
-        </figure>
 
-        <div class="recipe__details">
-          <div class="recipe__info">
-            <svg class="recipe__info-icon">
-              <use href="src/img/icons.svg#icon-clock"></use>
-            </svg>
-            <span class="recipe__info-data recipe__info-data--minutes">45</span>
-            <span class="recipe__info-text">minutes</span>
+      <figure class="recipe__fig">
+        <img src="#" alt="Tomato" class="recipe__img" />
+        <h1 class="recipe__title">
+          <span>Pasta with tomato cream sauce</span>
+        </h1>
+      </figure>
+
+      <div class="recipe__details">
+        <div class="recipe__info">
+          <svg class="recipe__info-icon">
+            <use href="src/img/icons.svg#icon-clock"></use>
+          </svg>
+          <span class="recipe__info-data recipe__info-data--minutes">45</span>
+          <span class="recipe__info-text">minutes</span>
+        </div>
+        <div class="recipe__info">
+          <svg class="recipe__info-icon">
+            <use href="src/img/icons.svg#icon-users"></use>
+          </svg>
+          <span class="recipe__info-data recipe__info-data--people">4</span>
+          <span class="recipe__info-text">servings</span>
+
+          <div class="recipe__info-buttons">
+            <button class="btn--tiny btn--increase-servings">
+              <svg>
+                <use href="src/img/icons.svg#icon-minus-circle"></use>
+              </svg>
+            </button>
+            <button class="btn--tiny btn--increase-servings">
+              <svg>
+                <use href="src/img/icons.svg#icon-plus-circle"></use>
+              </svg>
+            </button>
           </div>
-          <div class="recipe__info">
-            <svg class="recipe__info-icon">
-              <use href="src/img/icons.svg#icon-users"></use>
-            </svg>
-            <span class="recipe__info-data recipe__info-data--people">4</span>
-            <span class="recipe__info-text">servings</span>
+        </div>
 
-            <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
-                <svg>
-                  <use href="src/img/icons.svg#icon-minus-circle"></use>
-                </svg>
-              </button>
-              <button class="btn--tiny btn--increase-servings">
-                <svg>
-                  <use href="src/img/icons.svg#icon-plus-circle"></use>
-                </svg>
-              </button>
+        <div class="recipe__user-generated">
+          <svg>
+            <use href="src/img/icons.svg#icon-user"></use>
+          </svg>
+        </div>
+        <button class="btn--round">
+          <svg class="">
+            <use href="src/img/icons.svg#icon-bookmark-fill"></use>
+          </svg>
+        </button>
+      </div>
+
+      <div class="recipe__ingredients">
+        <h2 class="heading--2">Recipe ingredients</h2>
+        <ul class="recipe__ingredient-list">
+          <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="src/img/icons.svg#icon-check"></use>
+            </svg>
+            <div class="recipe__quantity">1000</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">g</span>
+              pasta
             </div>
-          </div>
+          </li>
 
-          <div class="recipe__user-generated">
-            <svg>
-              <use href="src/img/icons.svg#icon-user"></use>
+          <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="src/img/icons.svg#icon-check"></use>
             </svg>
-          </div>
-          <button class="btn--round">
-            <svg class="">
-              <use href="src/img/icons.svg#icon-bookmark-fill"></use>
+            <div class="recipe__quantity">0.5</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">cup</span>
+              ricotta cheese
+            </div>
+          </li>
+          <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="src/img/icons.svg#icon-check"></use>
             </svg>
-          </button>
-        </div>
-
-        <div class="recipe__ingredients">
-          <h2 class="heading--2">Recipe ingredients</h2>
-          <ul class="recipe__ingredient-list">
-            <li class="recipe__ingredient">
-              <svg class="recipe__icon">
-                <use href="src/img/icons.svg#icon-check"></use>
-              </svg>
-              <div class="recipe__quantity">1000</div>
-              <div class="recipe__description">
-                <span class="recipe__unit">g</span>
-                pasta
-              </div>
-            </li>
-
-            <li class="recipe__ingredient">
-              <svg class="recipe__icon">
-                <use href="src/img/icons.svg#icon-check"></use>
-              </svg>
-              <div class="recipe__quantity">0.5</div>
-              <div class="recipe__description">
-                <span class="recipe__unit">cup</span>
-                ricotta cheese
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="recipe__directions">
-          <h2 class="heading--2">How to cook it</h2>
-          <p class="recipe__directions-text">
-            This recipe was carefully designed and tested by
-            <span class="recipe__publisher">The Pioneer Woman</span>. Please check out
-            directions at their website.
-          </p>
-          <a
-            class="btn--small recipe__btn"
-            href="http://thepioneerwoman.com/cooking/pasta-with-tomato-cream-sauce/"
-            target="_blank"
-          >
-            <span>Directions</span>
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-right"></use>
+            <div class="recipe__quantity">0.5</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">cup</span>
+              ricotta cheese
+            </div>
+          </li>
+          <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="src/img/icons.svg#icon-check"></use>
             </svg>
-          </a>
-        </div>
-        -->
+            <div class="recipe__quantity">0.5</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">cup</span>
+              ricotta cheese
+            </div>
+          </li>
+          <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+              <use href="src/img/icons.svg#icon-check"></use>
+            </svg>
+            <div class="recipe__quantity">0.5</div>
+            <div class="recipe__description">
+              <span class="recipe__unit">cup</span>
+              ricotta cheese
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="recipe__directions">
+        <h2 class="heading--2">How to cook it</h2>
+        <p class="recipe__directions-text">
+          This recipe was carefully designed and tested by
+          <span class="recipe__publisher">The Pioneer Woman</span>. Please check out
+          directions at their website.
+        </p>
+        <a class="btn--small recipe__btn" href="http://thepioneerwoman.com/cooking/pasta-with-tomato-cream-sauce/"
+          target="_blank">
+          <span>Directions</span>
+          <svg class="search__icon">
+            <use href="src/img/icons.svg#icon-arrow-right"></use>
+          </svg>
+        </a>
+      </div>
+
     </div>
   </div>
 

@@ -4,8 +4,29 @@
   padding: 3rem 0;
   display: flex;
   flex-direction: column;
+
+  @media only screen and (max-width: $bp-medium) {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    bottom: 0;
+    // width: 50%;
+    background-color: $color-grey-light-2;
+    // opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+.preview__logo--mobile {
+  display: none;
 }
 
+@media only screen and (max-width: $bp-medium) {
+  .preview__logo--mobile {
+    display: block;
+    height: 5.6rem;
+    margin: 0 0 4rem 2.5rem;
+  }
+}
 .results {
   list-style: none;
   margin-bottom: 2rem;

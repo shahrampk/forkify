@@ -748,6 +748,7 @@ const controlSearchResult = async function() {
         // 1) Get Search Quey
         const query = (0, _searchViewJsDefault.default).getQuery();
         if (!query) return;
+        // resultViews.render(model.render())
         // Showing Loader...
         (0, _resultViewsJsDefault.default).renderLoader();
         (0, _paginationViewJsDefault.default)._clear();
@@ -2783,9 +2784,10 @@ class ResultsView extends (0, _viewDefault.default) {
     }
     _generateMarkupCards(cardData) {
         if (!cardData) return;
+        const id = window.location.hash.slice(1);
         return `
       <li class="preview">
-        <a class="preview__link" href="#${cardData.id}">
+        <a class="preview__link ${id === cardData.id ? 'preview__link--active' : ''}" href="#${cardData.id}">
           <figure class="preview__fig">
             <img src="${cardData.imageUrl}" alt="${cardData.title}" />
           </figure>

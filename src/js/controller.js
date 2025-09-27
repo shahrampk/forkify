@@ -29,6 +29,7 @@ const controlSearchResult = async function () {
     // 1) Get Search Quey
     const query = searchView.getQuery();
     if (!query) return;
+    // resultViews.render(model.render())
     // Showing Loader...
     resultViews.renderLoader();
     paginationView._clear();

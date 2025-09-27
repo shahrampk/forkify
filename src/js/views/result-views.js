@@ -9,10 +9,12 @@ class ResultsView extends View {
   }
   _generateMarkupCards(cardData) {
     if (!cardData) return;
-
+    const id = window.location.hash.slice(1);
     return `
       <li class="preview">
-        <a class="preview__link" href="#${cardData.id}">
+        <a class="preview__link ${
+          id === cardData.id ? 'preview__link--active' : ''
+        }" href="#${cardData.id}">
           <figure class="preview__fig">
             <img src="${cardData.imageUrl}" alt="${cardData.title}" />
           </figure>

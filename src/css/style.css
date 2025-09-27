@@ -38,6 +38,7 @@ body {
   border-radius: 9px;
   overflow: hidden;
   box-shadow: 0 2rem 6rem 0.5rem rgba(97, 85, 81, 0.2);
+  position: relative;
   display: grid;
   grid-template-rows: 10rem minmax(100rem, auto);
   grid-template-columns: 1fr 2fr;
@@ -48,6 +49,11 @@ body {
     max-width: 100%;
     margin: 0;
     border-radius: 0;
+  }
+}
+@media only screen and (max-width: 61.25em) {
+  .container {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -192,7 +198,7 @@ body {
 }
 
 .spinner {
-  margin: 5rem auto;
+  margin: 10rem auto;
   text-align: center;
 }
 .spinner svg {
@@ -244,6 +250,11 @@ body {
   height: 4.6rem;
   display: block;
 }
+@media only screen and (max-width: 37.5em) {
+  .header__logo {
+    margin-left: 2rem;
+  }
+}
 
 .search {
   background-color: #fff;
@@ -252,6 +263,11 @@ body {
   align-items: center;
   padding-left: 3rem;
   transition: all 0.3s;
+}
+@media only screen and (max-width: 37.5em) {
+  .search {
+    display: none;
+  }
 }
 .search:focus-within {
   transform: translateY(-2px);
@@ -288,6 +304,11 @@ body {
   align-self: stretch;
   margin-right: 2.5rem;
 }
+@media only screen and (max-width: 37.5em) {
+  .nav {
+    margin-right: 0.5rem;
+  }
+}
 .nav__list {
   list-style: none;
   display: flex;
@@ -318,11 +339,27 @@ body {
   margin-right: 0.7rem;
   transform: translateY(-1px);
 }
+@media only screen and (max-width: 78.15em) {
+  .nav__btn span {
+    display: none;
+  }
+}
 .nav__btn:focus {
   outline: none;
 }
 .nav__btn:hover {
   background-color: #f2efee;
+}
+.nav__small-screen {
+  display: none;
+}
+@media only screen and (max-width: 37.5em) {
+  .nav__big-screen {
+    display: none;
+  }
+  .nav__small-screen {
+    display: block;
+  }
 }
 
 .bookmarks {
@@ -444,7 +481,28 @@ body {
   display: flex;
   flex-direction: column;
 }
+@media only screen and (max-width: 61.25em) {
+  .search-results {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    bottom: 0;
+    background-color: #f2efee;
+    transform: translateX(-100%);
+  }
+}
 
+.preview__logo--mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 61.25em) {
+  .preview__logo--mobile {
+    display: block;
+    height: 5.6rem;
+    margin: 0 0 4rem 2.5rem;
+  }
+}
 .results {
   list-style: none;
   margin-bottom: 2rem;
@@ -531,6 +589,11 @@ body {
   align-items: center;
   padding: 7.5rem 8rem 3.5rem 8rem;
 }
+@media only screen and (max-width: 37.5em) {
+  .recipe__details {
+    padding: 7.5rem 2rem 1.5rem 2rem;
+  }
+}
 .recipe__info {
   font-size: 1.65rem;
   text-transform: uppercase;
@@ -545,6 +608,11 @@ body {
   width: 2.35rem;
   fill: #f38e82;
   margin-right: 1.15rem;
+}
+@media only screen and (max-width: 37.5em) {
+  .recipe__info-text {
+    display: none;
+  }
 }
 .recipe__info-data {
   margin-right: 0.5rem;
@@ -579,6 +647,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+@media only screen and (max-width: 37.5em) {
+  .recipe__ingredients {
+    padding: 4rem 2rem;
+  }
 }
 .recipe__ingredient-list {
   display: grid;
